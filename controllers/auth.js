@@ -1,4 +1,4 @@
-const {User} = require("../models");
+const {User, File} = require("../models");
 const comparePassword = require("../utils/comparePassword");
 const hashPassword = require("../utils/haspassward");
 const generateToken = require("../utils/generateToken");
@@ -227,7 +227,7 @@ const changePassword = async(req, res, next) =>{
 const updateProfle = async(req, res, next) => {
     try{
         const {_id} = req.user;
-        const {name, email} = req.body;
+        const {name, email, profilePic} = req.body;
 
         const user = await User.findById(_id).select("-password -verificationCode -forgetPasswordCode");
         if(!user){
@@ -244,8 +244,17 @@ const updateProfle = async(req, res, next) => {
 
         }
 
+        if (profilePic) {
+            const file = await findById(profilePic);
+            if (!file){
+                res.code = 400;
+                throw new Error("File not found");
+            }
+        }
+
         user.name = name ? name : user.name;
         user.email = email ? email : user.email;
+        user.profilePic = profilePic;
 
 
         if(email){
@@ -260,4 +269,19 @@ const updateProfle = async(req, res, next) => {
         next(error);
     }
 }
-module.exports = {signup, signin, verifyCode, verifyUser, forgetPasswordCode, recoverPassword, changePassword, updateProfle};
+const currentUser = async(req, res, next) => {
+    try{
+        const {_id} = req.user;
+        const user = await User.findById(_id).select("-password -verificationCode -forgotPasswordCode").populate("profilePic");
+        if(!user){
+            res.code = 404;
+            throw new Error("user not found");
+        }
+
+        res.status(200).json({code: 200, status: true, message: "get currennt user succesfully", data: { user}});
+
+    }catch(error){
+        next(error);
+    }
+}
+module.exports = {signup, signin, verifyCode, verifyUser, forgetPasswordCode, recoverPassword, changePassword, updateProfle, currentUser};

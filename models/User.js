@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema({
     isVerified: {type:Boolean, default: false},
     verificationCode: {type: String},
     forgetPasswordCode: {type: String},
+    profilePic: {type: mongoose.Types.ObjectId, ref: "file"},
 }, {timestamps: true})
 
 

@@ -11,9 +11,7 @@ router.post("/send-verification-email",emailValidator, validate, authController.
 router.post("/verify-user",verifyUserValidator, validate, authController.verifyUser)
 router.post("/forget-password-code",emailValidator, validate, authController.forgetPasswordCode)
 router.post("/recover-password",recoverPasswordValidator, validate, authController.recoverPassword)
-
 router.put("/change-password", changePasswordValidator, validate ,isAuth, authController.changePassword)
-
 router.put("/update-profile", updateProfileValidator, validate ,isAuth, authController.updateProfle)
-
+router.get("/current-user", isAuth, authController.currentUser)
 module.exports = router;
