@@ -1,11 +1,10 @@
-require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+const morgan = require("morgan");
 dotenv.config();
 const connectMongoDB = require("./init/mongodb");
-const {authRoute, categoryRoute, fileRoute} = require("./routes")
-const morgan = require("morgan");
+const {authRoute, categoryRoute, fileRoute, postRoute} = require("./routes");
 const {errorHandler} = require("./middlewares");
 const notFound = require("./controllers/notfound");
 
@@ -20,10 +19,10 @@ app.use(bodyParser.urlencoded({limit: "500mb", extended: true}));
 app.use(morgan("dev"));
 
 // Routes section
-app.use("/api/v1/auth", authRoute)
-app.use("/api/v1/category", categoryRoute)
-app.use("/api/v1/file", fileRoute)
-
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/category", categoryRoute);
+app.use("/api/v1/file", fileRoute);
+app.use("/api/v1/post", postRoute);
 
 //  not found 
 app.use(notFound);
