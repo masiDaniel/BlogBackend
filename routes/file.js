@@ -5,6 +5,9 @@ const {fileController} = require("../controllers");
 const upload = require("../middlewares/upload")
 
 
-router.post("/upload" ,isAuth, upload.array("image", 3), fileController.uploadFile);
+router.post("/upload" ,isAuth, upload.single("image"), fileController.uploadFile);
 
+router.get("/signed-url", isAuth, fileController.getSignedUrl);
+
+router.delete("/delete-file", isAuth, fileController.deleteFile);
 module.exports = router;
